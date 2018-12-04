@@ -1,5 +1,6 @@
 const fs = require('fs');
 const rimraf = require('rimraf');
+const util = require('util');
 
 const tempFilePath = '/Users/craigmiller/Documents/temp.txt';
 const jsDirPath = '/Users/craigmiller/Documents/JSTemp';
@@ -23,6 +24,21 @@ const readFile = () => {
 		if (err) throw err;
 		console.log(contents);
 	});
+};
+
+const readFilePromise = async () => {
+	const readFile = util.promisify(fs.readFile);
+	// readFile(tempFilePath, 'utf8')
+		// .then(contents => console.log(contents))
+		// .catch(err => console.log(err));
+
+	try {
+		const contents = await readFile(tempFilePath, 'utf8');
+		console.log(contents);
+	}
+	catch (err) {
+		console.log(err);
+	}
 };
 
 const listDirectory = () => {
@@ -78,6 +94,9 @@ process.argv
 		}
 		else if ('readFile' === val) {
 			readFile();
+		}
+		else if ('readFilePromise' === val) {
+			readFilePromise();
 		}
 		else if ('listDirectory' === val) {
 			listDirectory();
